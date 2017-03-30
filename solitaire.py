@@ -39,7 +39,7 @@ while not g.solved():
     # show all cards
     elif turn == 's':
         print("Naughty, naughty!")
-        g.display(display_foundations,display_deck,show_all=True)
+        g.display(display_foundations, display_deck, show_all=True)
         continue
 
     # move card from stack M to the appropriate Foundation stack
@@ -82,14 +82,14 @@ while not g.solved():
 
         # move card only if it is a valid move
         if source_card and g.tableau[dest].isValidAdd(source_card):
-            source_deck.removeCards(len(stacked_cards)+1)
-            g.tableau[dest].addCards([source_card]+stacked_cards)
+            source_deck.removeCards(len(stacked_cards) + 1)
+            g.tableau[dest].addCards([source_card] + stacked_cards)
     
     # unrecognised input
     else:
         print("Invalid input; try again")
 
     # display game state
-    g.display(display_foundations,display_deck)
+    g.display(display_foundations, display_deck)
 
 print("Solved it ... go you!")

@@ -64,33 +64,35 @@ class Card():
 
     def nextValue(self):
         """Return the next value up from the value of the card"""
-        return Card.VALUES[Card.VALUES.index(self.getValue())+1]
+        return Card.VALUES[Card.VALUES.index(self.getValue()) + 1]
 
     def prevValue(self):
         """Return the previous value down from the value of the card"""
-        return Card.VALUES[Card.VALUES.index(self.getValue())-1]
+        return Card.VALUES[Card.VALUES.index(self.getValue()) - 1]
 
     def __toString(self):
         """Return the card value and suit as a string (e.g. "AH")"""
         return self.value + self.suit
 
-    def display(self,stack_no="",extras="",sep=__CARD_SEPARATOR,visible=True):
+    def display(self, stack_no="", extras="", sep=__CARD_SEPARATOR, visible=True):
         """Display the card in ASCII glory, with the stack no. (0-7) and the number of "extra cards" in that stack"""
         if visible:
             card_edge = self.__VISIBLE_CARD_EDGE
         else:
             card_edge = self.__INVISIBLE_CARD_EDGE
-        return(["  {}  ".format(stack_no) + sep, "+---+"+sep, "{0}   {0}".format(card_edge) + sep,
-                "{0}{1:>3s}{0}".format(card_edge, self.__toString()) + sep,"{0}   {0}".format(card_edge) + sep,
-                "+---+"+sep,"{:^5s}".format(extras)+sep])
+        return (["  {}  ".format(stack_no) + sep, "+---+"+sep, "{0}   {0}".format(card_edge) + sep,
+                "{0}{1:>3s}{0}".format(card_edge, self.__toString()) + sep,
+                "{0}   {0}".format(card_edge) + sep,
+                "+---+"+sep, 
+                "{:^5s}".format(extras)+sep])
 
-    def displayEmptyCard(self,stack_no='',sep=__CARD_SEPARATOR):
+    def displayEmptyCard(self, stack_no='', sep=__CARD_SEPARATOR):
         """Display an empty card in ASCII glory!"""
-        return(["  {}  ".format(stack_no)+sep,"+---+"+sep,
-                "{0}   {0}".format(self.__INVISIBLE_CARD_EDGE)+sep,
-                "{0}   {0}".format(self.__INVISIBLE_CARD_EDGE)+sep,
-                "{0}   {0}".format(self.__INVISIBLE_CARD_EDGE)+sep,
-                "+---+"+sep,"     "+sep])
+        return (["  {}  ".format(stack_no)+sep,"+---+" + sep,
+                 "{0}   {0}".format(self.__INVISIBLE_CARD_EDGE) + sep,
+                 "{0}   {0}".format(self.__INVISIBLE_CARD_EDGE) + sep,
+                 "{0}   {0}".format(self.__INVISIBLE_CARD_EDGE) + sep,
+                 "+---+" + sep, "     " + sep])
 
 
 
@@ -107,11 +109,11 @@ class Stack():
         """Initialise the stack to an empty list of cards"""
         self.cards = []
 
-    def addCard(self,card):
+    def addCard(self, card):
         """Add 'card' to the stack"""
         self.cards.append(card)
 
-    def addCards(self,cards):
+    def addCards(self, cards):
         """Add the list 'cards' to the stack"""
         self.cards += cards
 
@@ -119,7 +121,7 @@ class Stack():
         """Remove the (top) card from the stack"""
         return self.cards.pop()
 
-    def removeCards(self,n):
+    def removeCards(self, n):
         """Remove 'n' cards from the top of the stack"""
         ret_cards = []
         for i in range(n):
@@ -129,20 +131,20 @@ class Stack():
     def showTopCard(self):
         """Return the "top" card from the stack, or the empty string if the stack is empty"""
         if self.cards:
-            return(self.cards[-1])
-        return("")
+            return self.cards[-1]
+        return ""
     
     def showTopCards(self):
         """Return the "top" card from the stack, and an empty list of "stacked" cards"""
         if self.cards:
-            return(self.cards[-1],[])
-        return("",[])
+            return (self.cards[-1],[])
+        return ("",[])
 
     def showBottomCard(self):
         """Show the "bottom" card (= same as the "top" card for the general stack)"""
         return self.showTopCard()
 
-    def display(self,stack_no='',show_all=False,show_from=None):
+    def display(self, stack_no='', show_all=False, show_from=None):
         """Generate a string rendering of the stack, optionally numbering it
         as 'stack_no', optionally showing all cards on the stack ('show_all'),
         and optionally showing all cards from 'show_from' on"""
@@ -151,11 +153,11 @@ class Stack():
 
         # No cards in stack
         if not card_count:
-            return(c.displayEmptyCard(stack_no))
+            return c.displayEmptyCard(stack_no)
 
         # One card in stack
         elif card_count == 1:
-            return(self.showTopCard().display(stack_no))
+            return self.showTopCard().display(stack_no)
 
         # Multiple cars in stack
         else:
@@ -166,7 +168,7 @@ class Stack():
                 for card in self.cards[1:]:
                     out = out[:Stack.__CARD_FOOTER]  # delete the last three rows of the card (the bottom half) to stack cards up
                     out += card.display()[Stack.__CARD_HEADER:]  # delete the first row of the card (the blank header)
-                return(out)
+                return out
 
             # Show all cards from 'show_from' on
             elif type(show_from) is int:
@@ -184,11 +186,11 @@ class Stack():
                 else:
                     out = self.cards[-1].display(stack_no,extras="+"+str(show_from))
 
-                return(out)
+                return out
             
             # Standard display
             else:
-                return(self.showTopCard().display(stack_no,"+"+str(card_count-1)))
+                return self.showTopCard().display(stack_no, "+" + str(card_count - 1))
 
 
 
@@ -202,7 +204,7 @@ class TableauStack(Stack):
         self.cards = []
         self.base = 0
 
-    def addCards(self,cards,initialise=False):
+    def addCards(self, cards, initialise=False):
         """Add 'cards' to tableau, optionally in initialisation phase"""
         self.cards += cards
 
@@ -225,7 +227,7 @@ class TableauStack(Stack):
         # Remove the card
         return self.cards.pop()
 
-    def removeCards(self,n):
+    def removeCards(self, n):
         """Remove 'n' cards from the tableau"""
         ret_cards = [self.removeCard()]  # cards which are removed
         
@@ -238,21 +240,21 @@ class TableauStack(Stack):
     def showTopCard(self):
         """Show the "top" card, or the empty string if there is no top card (empty tableau)"""
         if self.cards:
-            return(self.cards[self.base])
-        return("")
+            return self.cards[self.base]
+        return ""
 
     def showBottomCard(self):
         """Show the "bottom" card, or the empty string if there is no bottom card (empty tableau)"""
         if self.cards:
-            return(self.cards[-1])
-        return("")
+            return self.cards[-1]
+        return ""
 
     def showTopCards(self):
         """Show the top card and the list of all cards stacked on it; 
         empty string and empty list if empty tableau"""
         if self.cards:
-            return(self.cards[self.base],self.cards[self.base+1:])
-        return("",[])
+            return (self.cards[self.base], self.cards[self.base+1:])
+        return ("",[])
 
     def isValidAdd(self, card):
         """Can 'card' be added to the current tableau (right colour and value)?"""
@@ -269,7 +271,7 @@ class FoundationStack(Stack):
     # constants associated with FoundationStack:
     __ALL_CARDS = 13  # maximum number of cars on a Foundation stack
 
-    def isValidAdd(self,card):
+    def isValidAdd(self, card):
         """Can 'card' be added to the current foundation (right value and suit)?"""
         if not self.showTopCard():
             return card.isAce()
@@ -348,18 +350,18 @@ class Game():
         for suit in Card.SUITS:
             self.foundation[suit] = FoundationStack()
 
-    def display(self,display_foundations=False,display_deck=True,show_all=False):
+    def display(self, display_foundations=False, display_deck=True, show_all=False):
         """Display the various stacks in the current game, optionally displaying the
         foundation stacks ('display_foundations'), optionally displaying the deck 
         ('display_deck') and optionally disclosing the full content of each stack ('show_all')"""
 
-        def zip_stacks(list1,list2):
+        def zip_stacks(list1, list2):
             """Local function which 'zips' together the rendering of the two stacks (each
             in the form of a list of text) into a list of text globs"""
             if len(list1) < len(list2):
-                out = [a+b for a,b in zip_longest(list1,list2,fillvalue=" "*len(list1[0]))]
+                out = [a+b for a,b in zip_longest(list1, list2, fillvalue=" "*len(list1[0]))]
             else:
-                out = [a+b for a,b in zip_longest(list1,list2,fillvalue=" "*len(list2[0]))]
+                out = [a+b for a,b in zip_longest(list1, list2, fillvalue=" "*len(list2[0]))]
             return out
 
         # Display the foundation stacks first
@@ -369,7 +371,7 @@ class Game():
             # Render the foundation stacks as a single glob of text
             for suit in Card.SUITS:
                 if out:
-                    out = zip_stacks(out,self.foundation[suit].display())
+                    out = zip_stacks(out, self.foundation[suit].display())
                 else:
                     out = self.foundation[suit].display()
             print("\n".join(out))
@@ -380,11 +382,11 @@ class Game():
 
         # Add each of the remaining tableaux the rendering
         for i in range(1,Game.TABLEAUX):
-            out = zip_stacks(out,self.tableau[i].display(str(i),show_all=show_all,show_from=self.tableau[i].base))
+            out = zip_stacks(out, self.tableau[i].display(str(i), show_all=show_all, show_from=self.tableau[i].base))
 
         # Display the deck
         if display_deck:
-            out = zip_stacks(out,self.deck.display(str(Game.TABLEAUX),show_all=show_all))
+            out = zip_stacks(out, self.deck.display(str(Game.TABLEAUX), show_all=show_all))
 
         print("\n".join(out))
 
